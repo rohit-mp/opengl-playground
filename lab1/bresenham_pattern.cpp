@@ -12,7 +12,7 @@ void initGL()
 
 void bresenham(int X1, int Y1, int X2, int Y2) {
     glBegin(GL_POINTS);
-    if(X1!=X2){
+    if(abs(X1-X2) > abs(Y1-Y2)){
         if(X1 > X2){
             int tmp = X1;
             X1 = X2;
@@ -35,14 +35,23 @@ void bresenham(int X1, int Y1, int X2, int Y2) {
     }
     else{
         if(Y1 > Y2){
-            int tmp = Y1;
+            int tmp = X1;
+            X1 = X2;
+            X2 = tmp;
+            tmp = Y1;
             Y1 = Y2;
             Y2 = tmp;
         }
-        int x = X1, y = Y1;
-        while(y <= Y2){
+        int fraction = 0;
+        int fraction_increment = 2 * ((X1 <= X2) ? (X2 - X1) : (X1 - X2));
+        int x, y;
+        for(y = Y1, x = X1; y <= Y2; y++) {
             glVertex2i(x, y);
-            y = y + (Y1<=Y2 ? 1 : -1);
+            fraction += fraction_increment;
+            if(fraction >= 1) {
+                x += (X1 <= X2 ? 1 : -1);
+                fraction -= 2 * (Y1 <= Y2 ? (Y2 - Y1) : (Y1 - Y2));
+            }
         }
     }
     glEnd();
