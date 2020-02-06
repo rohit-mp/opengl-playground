@@ -5,8 +5,10 @@
 #include <GL/glut.h> // GLUT, include glu.h and gl.h
 #include <math.h>
 #include <unistd.h>
+#include <stdio.h>
 
 float xangle = 0.0f, yangle = 0.f, zangle = 0.0f;
+float X = 0, Y = 0, Z = 0;
 
 /* Initialize OpenGL Graphics */
 void initGL()
@@ -15,12 +17,20 @@ void initGL()
    glClearDepth(1.0f);                   // Set background depth to farthest
    glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
    glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+   glOrtho(-200, 200, -200, 200, -200, 200);
    // glShadeModel(GL_SMOOTH);   // Enable smooth shading
    // glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
 }
 
 void display1() {
     glutPostRedisplay();
+}
+
+void mousePressed (int button, int state, int x, int y) {
+    printf("%d %d %d %d\n", button, state, x, y);
+    glTranslatef(x, y, 0);
+    glutPostRedisplay();
+    glTranslatef(-x, -y, 0);
 }
 
 void keyPressed (unsigned char key, int x, int y) {  
@@ -119,6 +129,7 @@ int main(int argc, char **argv)
     glutCreateWindow("Vertex, Primitive & Color"); // Create window with the given title
     glutDisplayFunc(display);                      // Register callback handler for window re-paint event
     // glutIdleFunc(display1);
+    glutMouseFunc(mousePressed);
     glutKeyboardFunc(keyPressed);
     initGL();                                      // Our own OpenGL initialization
     glutMainLoop();                                // Enter the event-processing loop
