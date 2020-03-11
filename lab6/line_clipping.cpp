@@ -204,7 +204,7 @@ int clip_points() {
         }
         printf("--%d,%d %d,%d--\n", X1, Y1, X2, Y2);
     }
-    return 1;
+    return check();
 }
 
 void display()
